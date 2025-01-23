@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthRepository = void 0;
+const error_1 = require("../Constants/error");
 const userModel_1 = require("../Models/userModel");
 class AuthRepository {
     constructor() { }
@@ -29,6 +30,28 @@ class AuthRepository {
                 const newUser = new userModel_1.User(userData);
                 yield newUser.save();
                 return newUser;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    findUserById(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return userModel_1.User.findOne({ _id: userId });
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    updatePassword(userId, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!userId)
+                    throw new error_1.BadRequstError("Invalid user");
+                return userModel_1.User.updateOne({ _id: userId }, { $set: { password: password } });
             }
             catch (error) {
                 throw error;

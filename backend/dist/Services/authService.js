@@ -13,6 +13,7 @@ exports.AuthService = void 0;
 const error_1 = require("../Constants/error");
 const password_1 = require("../Utils/password");
 const token_1 = require("../Utils/token");
+const mailer_1 = require("../Utils/mailer");
 class AuthService {
     constructor(authRepository) {
         this.authRepository = authRepository;
@@ -41,6 +42,25 @@ class AuthService {
             }
         });
     }
+    forgetPassword(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.authRepository.findUserByEmail(email);
+                if (!user)
+                    throw new error_1.BadRequstError("User not found please enter a valid email");
+                const forgetToken = (0, token_1.generateAccessToken)(user === null || user === void 0 ? void 0 : user._id);
+                const link = `${process.env.FRONTEND_URL}/reset-password/${forgetToken}`;
+                const isLinkSend = yield (0, mailer_1.sendLinkToEmail)(email, link);
+                if (!isLinkSend)
+                    throw new error_1.BadRequstError("Failed to send link to your email try again..");
+                return { success: true };
+            }
+            catch (err) {
+                console.log("Error in user login");
+                throw err;
+            }
+        });
+    }
     loginUser(userData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -56,8 +76,50 @@ class AuthService {
                 }
                 const accessToken = (0, token_1.generateAccessToken)(user === null || user === void 0 ? void 0 : user._id);
                 const refreshToken = (0, token_1.generateRefreshToken)(user === null || user === void 0 ? void 0 : user._id);
-                delete user['password'];
+                delete user["password"];
                 return { user: user, accessToken, refreshToken };
+            }
+            catch (err) {
+                console.log("Error in user login");
+                throw err;
+            }
+        });
+    }
+    verifyForgetPasswordToken(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const isValid = (0, token_1.verifyToken)(token);
+                if (!isValid) {
+                    return { success: false, message: "The link is expired please try again" };
+                }
+                const user = yield this.authRepository.findUserById(isValid === null || isValid === void 0 ? void 0 : isValid.data);
+                if (!user)
+                    return { success: false, message: "Invalid User" };
+                return { success: true };
+            }
+            catch (err) {
+                console.log("Error in user login");
+                throw err;
+            }
+        });
+    }
+    updatePassword(formData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = (0, token_1.verifyToken)(formData.token);
+                console.log(token, formData === null || formData === void 0 ? void 0 : formData.token);
+                if (!token) {
+                    return { success: false, message: "Link expired" };
+                }
+                const user = yield this.authRepository.findUserById(token === null || token === void 0 ? void 0 : token.data);
+                if (!user)
+                    return { success: false, message: "User not found" };
+                const isSamePassword = yield (0, password_1.comparePassword)(formData === null || formData === void 0 ? void 0 : formData.password, user === null || user === void 0 ? void 0 : user.password);
+                if (isSamePassword)
+                    throw new error_1.BadRequstError("Enter a password which is not your old password");
+                const newHashedPassword = yield (0, password_1.hashPassword)(formData === null || formData === void 0 ? void 0 : formData.password);
+                yield this.authRepository.updatePassword(user === null || user === void 0 ? void 0 : user._id, newHashedPassword);
+                return { success: true, message: "Your password has been updated successfully" };
             }
             catch (err) {
                 console.log("Error in user login");

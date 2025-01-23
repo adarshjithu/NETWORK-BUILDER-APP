@@ -1,3 +1,4 @@
+import { BadRequstError } from "../Constants/error";
 import { IUser, User } from "../Models/userModel";
 
 export class AuthRepository {
@@ -15,6 +16,21 @@ export class AuthRepository {
             const newUser=  new User(userData);
             await newUser.save()
             return newUser;
+        } catch (error) {
+            throw error
+        }
+    }
+    async findUserById(userId:string):Promise<IUser|null> {
+        try {
+               return User.findOne({_id:userId})
+        } catch (error) {
+            throw error
+        }
+    }
+    async updatePassword(userId:string,password:string):Promise<Record<string,any>|null> {
+        try {
+            if(!userId) throw new BadRequstError("Invalid user")
+               return User.updateOne({_id:userId},{$set:{password:password}})
         } catch (error) {
             throw error
         }

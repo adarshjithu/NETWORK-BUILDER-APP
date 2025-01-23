@@ -140,5 +140,52 @@ class AuthController {
             }
         });
     }
+    // @desc   User forget password
+    // @route  Post auth/forget_password
+    // @access User
+    forgetPassword(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                if (!req.body || req.body.email == '')
+                    throw new error_1.BadRequstError("Invalid email");
+                const response = yield this.authService.forgetPassword((_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.email);
+                if (response === null || response === void 0 ? void 0 : response.success) {
+                    res === null || res === void 0 ? void 0 : res.status(OK).json({ success: true, message: "Reset password link has been send to your email" });
+                }
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    // @desc   Verify the forget password link
+    // @route  Post auth/forget_password/verify_token
+    // @access User
+    verifyToken(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.authService.verifyForgetPasswordToken(req.body.token);
+                res === null || res === void 0 ? void 0 : res.status(OK).json({ success: true, response: response });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    // @desc   Rest the password after validation
+    // @route  Post auth/forget_password/new_password
+    // @access User
+    setNewPassword(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.authService.updatePassword(req.body);
+                res.status(OK).json({ success: true, response: response });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
 }
 exports.AuthController = AuthController;

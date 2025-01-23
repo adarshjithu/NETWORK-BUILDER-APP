@@ -9,6 +9,7 @@ import InternalServerError from "../Components/Error/500";
 import NotFoundPage from "../Components/Error/404";
 import SocketProvider from "../Components/Context/SocketContext";
 import ForgotPassword from "../Components/ForgetPassword/ForgetPassword";
+import ResetPassword from "../Components/ForgetPassword/ResetPassword";
 
 const Login = React.lazy(() => import("../Pages/Login/Login"));
 const Signup = React.lazy(() => import("../Pages/Signup/Signup"));
@@ -22,6 +23,7 @@ function AppRoute() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/forget-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
                         <Route
                             path="/"

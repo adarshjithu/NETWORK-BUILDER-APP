@@ -33,3 +33,27 @@ export const forgetPassword = async (email: string) => {
         errorHandler(error);
     }
 };
+export const verifyToken = async (token: string) => {
+
+    try {
+       
+        const response = await axiosInstance.post("/auth/forget_password/verify_token",{token:token});
+        
+         return response;
+    } catch (error) {
+        console.log('error',error)
+        errorHandler(error);
+    }
+};
+export const resetPassword = async (formData: {token:string,password:string,confirmpassword:string}) => {
+
+    try {
+       
+        const response = await axiosInstance.post("/auth/forget_password/new_password",formData);
+        
+         return response;
+    } catch (error) {
+        console.log('error',error)
+        errorHandler(error);
+    }
+};

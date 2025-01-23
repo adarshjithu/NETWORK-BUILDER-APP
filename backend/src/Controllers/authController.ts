@@ -124,4 +124,38 @@ export class AuthController {
             next(error);
         }
     }
+    // @desc   User forget password
+    // @route  Post auth/forget_password
+    // @access User
+    async forgetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            if(!req.body||req.body.email=='') throw new BadRequstError("Invalid email")
+                const response =  await this.authService.forgetPassword(req?.body?.email)
+                 if(response?.success){res?.status(OK).json({success:true,message:"Reset password link has been send to your email"})}
+        } catch (error) {
+            next(error);
+        }
+    }
+    // @desc   Verify the forget password link
+    // @route  Post auth/forget_password/verify_token
+    // @access User
+    async verifyToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+           const response = await this.authService.verifyForgetPasswordToken(req.body.token)
+           res?.status(OK).json({success:true,response:response})
+        } catch (error) {
+            next(error);
+        }
+    }
+    // @desc   Rest the password after validation
+    // @route  Post auth/forget_password/new_password
+    // @access User
+    async setNewPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+           const response = await this.authService.updatePassword(req.body)
+           res.status(OK).json({success:true,response:response})
+        } catch (error) {
+            next(error);
+        }
+    }
 }

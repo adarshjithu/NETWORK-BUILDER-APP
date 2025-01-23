@@ -13,7 +13,9 @@ authRouter.post('/register',(req,res,next)=>controller.registerUser(req,res,next
 authRouter.post('/login',(req,res,next)=>controller.loginUser(req,res,next))
 authRouter.get('/refresh_token',(req,res,next)=>controller.refreshToken(req,res,next))
 authRouter.get('/logout',(req,res,next)=>controller.logoutUser(req,res,next))
+authRouter.post('/forget_password',(req,res,next)=>controller.forgetPassword(req,res,next))
+authRouter.post('/forget_password/verify_token',(req,res,next)=>controller.verifyToken(req,res,next))
+authRouter.post('/forget_password/new_password',(req,res,next)=>controller.setNewPassword(req,res,next))
 
-
-export default authRouter;
+export default authRouter; 
  
