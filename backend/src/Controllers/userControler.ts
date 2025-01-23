@@ -11,6 +11,7 @@ export class UserController {
     // @access User
     async updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            if(!req.body) new BadRequstError("Invalid Data")
             const response = await this.userServices.updateProfile(req.userId, req.body);
             res.status(OK).json({ success: true, message: "Profile Updated", profile: response });
         } catch (error) {
@@ -101,6 +102,7 @@ export class UserController {
     async updateEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
          
+            if(!req.body) new BadRequstError("Invalid data")
            const response = await this.userServices.updateEventData(req.body)
            if(response?.modifiedCount==1){
             res.status(OK).json({success:true,message:"The event details has been successfully updated"})

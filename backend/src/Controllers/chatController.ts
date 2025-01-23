@@ -1,6 +1,7 @@
 import { NextFunction ,Request,Response} from "express";
 import { ChatService } from "../Services/chatService";
 import { STATUS_CODES } from "../Constants/statusCodes";
+import { BadRequstError } from "../Constants/error";
 
 const { OK, BAD_REQUEST, UNAUTHORIZED, CONFLICT } = STATUS_CODES;
 export class ChatController {
@@ -13,6 +14,7 @@ export class ChatController {
     // @access User
     async createGroup(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            if(!req.body) new BadRequstError("Please provide a valid data")
             const response = await this.chatService.createGroup(req.body,req.userId);
             res.status(OK).json({success:true,message:"Group has been created successfully",data:response})
         } catch (err) {

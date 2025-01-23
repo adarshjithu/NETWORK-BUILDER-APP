@@ -25,6 +25,8 @@ class AuthController {
     registerUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!req.body)
+                    new error_1.BadRequstError("Please provide the required information for registration.");
                 const response = yield this.authService.registerUser(req.body);
                 const accessTokenMaxAge = 1000 * 60 * 5;
                 const refreshTokenMaxAge = 1000 * 60 * 60 * 48;
@@ -55,6 +57,8 @@ class AuthController {
     loginUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!req.body)
+                    new error_1.BadRequstError("Please provide the required information for login.");
                 const response = yield this.authService.loginUser(req.body);
                 const accessTokenMaxAge = 1000 * 60 * 5;
                 const refreshTokenMaxAge = 1000 * 60 * 60 * 48;
@@ -85,7 +89,6 @@ class AuthController {
     refreshToken(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("refresh token call");
                 const refreshToken = req.cookies["network-refresh_token"];
                 const refreshTokenValid = (0, token_1.verifyRefreshToken)(refreshToken);
                 if (!refreshToken || !refreshTokenValid)

@@ -46,7 +46,7 @@ axiosInstance.interceptors.response.use(
             location.href= '/404'
         }
 
-        if (message !== "Access Token Expired"||message!=='Refresh Token Expired') {
+        if (message !== "Access Token Expired") {
             toast.error(error?.response?.data?.message);
         }
 

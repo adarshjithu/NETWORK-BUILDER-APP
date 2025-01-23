@@ -23,6 +23,8 @@ class UserController {
     updateProfile(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!req.body)
+                    new error_1.BadRequstError("Invalid Data");
                 const response = yield this.userServices.updateProfile(req.userId, req.body);
                 res.status(OK).json({ success: true, message: "Profile Updated", profile: response });
             }
@@ -133,6 +135,8 @@ class UserController {
     updateEvent(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!req.body)
+                    new error_1.BadRequstError("Invalid data");
                 const response = yield this.userServices.updateEventData(req.body);
                 if ((response === null || response === void 0 ? void 0 : response.modifiedCount) == 1) {
                     res.status(OK).json({ success: true, message: "The event details has been successfully updated" });

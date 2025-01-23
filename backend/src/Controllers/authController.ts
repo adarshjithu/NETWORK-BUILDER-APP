@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express-serve-static-core";
 import { AuthService } from "../Services/authService";
 import { IUser, User } from "../Models/userModel";
-import { UnAuthorizedError } from "../Constants/error";
+import { BadRequstError, UnAuthorizedError } from "../Constants/error";
 import { generateAccessToken, verifyRefreshToken } from "../Utils/token";
 import { STATUS_CODES } from "../Constants/statusCodes";
 const { OK, BAD_REQUEST, UNAUTHORIZED, CONFLICT } = STATUS_CODES;
@@ -13,6 +13,7 @@ export class AuthController {
     // @access User
     async registerUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            if(!req.body) new BadRequstError("Please provide the required information for registration.")
             const response = await this.authService.registerUser(req.body as IUser);
 
             const accessTokenMaxAge = 1000 * 60 * 5;
@@ -42,6 +43,7 @@ export class AuthController {
     // @access User
     async loginUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            if(!req.body) new BadRequstError("Please provide the required information for login.")
             const response = await this.authService.loginUser(req.body as IUser);
 
             const accessTokenMaxAge = 1000 * 60 * 5;
@@ -70,7 +72,7 @@ export class AuthController {
     // @access User
     async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            console.log("refresh token call");
+            
 
             const refreshToken = req.cookies["network-refresh_token"];
             const refreshTokenValid = verifyRefreshToken(refreshToken);
