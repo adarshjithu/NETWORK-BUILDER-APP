@@ -121,17 +121,16 @@ class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 res.cookie("network-access_token", "", {
-                    maxAge: 0, // Expire immediately
-                    httpOnly: true, // Same as set
-                    secure: true, // Same as set, especially for production (HTTPS)
-                    sameSite: "none", // Same as set
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
                 });
-                // Clearing the refresh token cookie
                 res.cookie("network-refresh_token", "", {
-                    maxAge: 0, // Expire immediately
-                    httpOnly: true, // Same as set
-                    secure: true, // Same as set
-                    sameSite: "none", // Same as set
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
                 });
                 // Responding with a success message
                 res.status(200).json({ success: true, message: "User logout successful" });
