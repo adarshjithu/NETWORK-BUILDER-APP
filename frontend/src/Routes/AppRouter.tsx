@@ -8,6 +8,7 @@ import React, { Suspense } from "react";
 import InternalServerError from "../Components/Error/500";
 import NotFoundPage from "../Components/Error/404";
 import SocketProvider from "../Components/Context/SocketContext";
+import ForgotPassword from "../Components/ForgetPassword/ForgetPassword";
 
 const Login = React.lazy(() => import("../Pages/Login/Login"));
 const Signup = React.lazy(() => import("../Pages/Signup/Signup"));
@@ -16,63 +17,56 @@ function AppRoute() {
     return (
         <div>
             <BrowserRouter>
-                    <Suspense>
-                <Routes>
-
-                   
-                    
+                <Suspense>
+                    <Routes>
                         <Route path="/login" element={<Login />} />
-                    
-                  
                         <Route path="/signup" element={<Signup />} />
-                  
+                        <Route path="/forget-password" element={<ForgotPassword />} />
 
-                    <Route
-                        path="/"
-                        element={
-                            <ProtectedRoutes>
-                                <MainLayout>
-                                    <Home />
-                                </MainLayout>
-                            </ProtectedRoutes>
-                        }
-                    />
-                    <Route
-                        path="/chat"
-                        element={
-                            <ProtectedRoutes>
-                                <SocketProvider>
-                                    
+                        <Route
+                            path="/"
+                            element={
+                                <ProtectedRoutes>
+                                    <MainLayout>
+                                        <Home />
+                                    </MainLayout>
+                                </ProtectedRoutes>
+                            }
+                        />
+                        <Route
+                            path="/chat"
+                            element={
+                                <ProtectedRoutes>
+                                    <SocketProvider>
                                         <GroupChat />
-                                   
-                                </SocketProvider>
-                            </ProtectedRoutes>
-                        }
-                    />
-                    <Route
-                        path="/events"
-                        element={
-                            <ProtectedRoutes>
-                                <MainLayout>
-                                    <EventPage />
-                                </MainLayout>
-                            </ProtectedRoutes>
-                        }
-                    />
-                    <Route
-                        path="/profile"
-                        element={
-                            <ProtectedRoutes>
-                                <MainLayout>
-                                    <UserInfo />
-                                </MainLayout>
-                            </ProtectedRoutes>
-                        }
-                    />
-                    <Route path="/500" element={<InternalServerError />} />
-                    <Route path="/404" element={<NotFoundPage />} />
-                    <Route path="*" element={<NotFoundPage />} />
-                </Routes>
+                                    </SocketProvider>
+                                </ProtectedRoutes>
+                            }
+                        />
+                        <Route
+                            path="/events"
+                            element={
+                                <ProtectedRoutes>
+                                    <MainLayout>
+                                        <EventPage />
+                                    </MainLayout>
+                                </ProtectedRoutes>
+                            }
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoutes>
+                                    <MainLayout>
+                                        <UserInfo />
+                                    </MainLayout>
+                                </ProtectedRoutes>
+                            }
+                        />
+                        <Route path="/500" element={<InternalServerError />} />
+                        <Route path="/404" element={<NotFoundPage />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
                 </Suspense>
             </BrowserRouter>
         </div>
