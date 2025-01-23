@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const userRepository_1 = require("../Repositories/userRepository");
+const userService_1 = require("../Services/userService");
+const userControler_1 = require("../Controllers/userControler");
+const authenticate_1 = require("../Middlewares/authenticate");
+const userRoute = express_1.default.Router();
+const userRepository = new userRepository_1.UserRepository();
+const userServices = new userService_1.UserService(userRepository);
+const controler = new userControler_1.UserController(userServices);
+userRoute.put('/profile', authenticate_1.authenticate, (req, res, next) => controler.updateProfile(req, res, next));
+userRoute.get('/profile', authenticate_1.authenticate, (req, res, next) => controler.getProfile(req, res, next));
+userRoute.delete('/profile', authenticate_1.authenticate, (req, res, next) => controler.deleteProfile(req, res, next));
+userRoute.post('/event', authenticate_1.authenticate, (req, res, next) => controler.createEvent(req, res, next));
+userRoute.get('/events', authenticate_1.authenticate, (req, res, next) => controler.getAllEvents(req, res, next));
+userRoute.patch('/event', authenticate_1.authenticate, (req, res, next) => controler.rsvpEvent(req, res, next));
+userRoute.delete('/event/:eventId', authenticate_1.authenticate, (req, res, next) => controler.deleteEvent(req, res, next));
+userRoute.put('/event', authenticate_1.authenticate, (req, res, next) => controler.updateEvent(req, res, next));
+exports.default = userRoute;

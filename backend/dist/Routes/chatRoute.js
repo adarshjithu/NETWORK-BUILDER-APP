@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const chatRepository_1 = require("../Repositories/chatRepository");
+const chatService_1 = require("../Services/chatService");
+const chatController_1 = require("../Controllers/chatController");
+const authenticate_1 = require("../Middlewares/authenticate");
+const chatRoute = express_1.default.Router();
+const chatRepository = new chatRepository_1.ChatRepository();
+const chatService = new chatService_1.ChatService(chatRepository);
+const controler = new chatController_1.ChatController(chatService);
+chatRoute.post("/group", authenticate_1.authenticate, (req, res, next) => controler.createGroup(req, res, next));
+chatRoute.get("/groups", authenticate_1.authenticate, (req, res, next) => controler.getAllGroups(req, res, next));
+chatRoute.get("/groups/search", authenticate_1.authenticate, (req, res, next) => controler.searchGroups(req, res, next));
+chatRoute.post("/group/join", authenticate_1.authenticate, (req, res, next) => controler.joinGroup(req, res, next));
+chatRoute.get('/group/messages/:groupId', authenticate_1.authenticate, (req, res, next) => controler.getAllMessages(req, res, next));
+exports.default = chatRoute;
