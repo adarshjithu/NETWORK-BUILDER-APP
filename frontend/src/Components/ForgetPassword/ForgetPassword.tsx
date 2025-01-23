@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { forgetPassword } from "../../api/authServices";
 
 function ForgotPassword() {
     const [email,setEmail] = useState('')
 
-    const handleSubmit = (e:any)=>{
+    const handleSubmit =async (e:any)=>{
         e.preventDefault()
-        console.log(email)
+        const res = await forgetPassword(email)
     }
     return (
         <div className="bg-gradient-to-t from-gray-800 via-black to-gray-900 min-h-screen flex items-center justify-center">

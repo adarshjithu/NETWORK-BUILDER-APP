@@ -23,3 +23,13 @@ export const loginUser = async (data: IUser) => {
         errorHandler(error);
     }
 };
+export const forgetPassword = async (email: string) => {
+
+    try {
+        const response = await axiosInstance.post("/auth/forget_password",{email});
+        return response;
+    } catch (error) {
+        console.log('error',error)
+        errorHandler(error);
+    }
+};
